@@ -9,10 +9,8 @@
 .cardContainer {
   position: relative;
   z-index: 1;
-  z-index: 1;
   display: block;
-  width: 400px;
-  width: 400px;
+  width: 80%;
   margin: auto;
   padding: 50px;
   border-radius: 15px;
@@ -21,6 +19,7 @@
   h2 {
     margin-bottom: 2%;
     color: $orange;
+    text-align: center;
   }
 
   .loginForm {

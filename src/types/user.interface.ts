@@ -14,8 +14,10 @@ export interface IUserAuth {
  * Used for creating a new User
  */
 export interface IUserCreate extends IUserAuth {
+  picture?: string;
   firstName?: string;
   lastName?: string;
+  description?: string;
 }
 
 /**

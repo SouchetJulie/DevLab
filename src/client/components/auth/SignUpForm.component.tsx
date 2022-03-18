@@ -20,7 +20,14 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import { FormikHelpers } from "formik/dist/types";
 
+const SUPPORTED_FORMATS = "png" || "jpg" || "jpeg";
+
 const userCreateSchema = yup.object({
+  picture: yup.mixed()
+    .nullable()
+    .test("FILE_FORMAT", "Uploaded file has unsupported format.",
+      value => !value || (value && SUPPORTED_FORMATS.includes(value.type)))
+    .optional(),
   email: yup
     .string()
     .defined()
@@ -36,6 +43,10 @@ const userCreateSchema = yup.object({
     ),
   firstName: yup.string().optional(),
   lastName: yup.string().optional(),
+  description: yup
+    .string()
+    .max(500, "Maximun 500 caractères")
+    .optional()
 });
 
 type UserCreateSchema = yup.InferType<typeof userCreateSchema>;
@@ -47,11 +58,13 @@ const SignupForm: FunctionComponent = () => {
   const router = useRouter();
   // Form validation
   const initialValues: UserCreateSchema = {
+    picture: "",
     email: "",
     password: "",
     passwordConfirm: "",
     firstName: "",
     lastName: "",
+    description: "",
   };
   const [buttonMessage, setButtonMessage] = useState("S'inscrire");
 
@@ -60,10 +73,12 @@ const SignupForm: FunctionComponent = () => {
     { setSubmitting }: FormikHelpers<UserCreateSchema>
   ): Promise<void> => {
     const user: IUserCreate = {
+      picture: values.picture,
       email: values.email,
       password: values.password,
       firstName: values.firstName,
       lastName: values.lastName,
+      description: values.description,
     };
 
     let success: boolean = true;
@@ -126,6 +141,20 @@ const SignupForm: FunctionComponent = () => {
               onSubmit={handleSubmit}
               className={styles.loginForm}
             >
+              <Row>
+                <Form.Group controlId="picture">
+                  <Form.Control
+                    onChange={handleChange}
+                    name="picture"
+                    isInvalid={touched.picture && !!errors.picture}
+                    isValid={touched.picture && !errors.picture}
+                    className={styles.loginInput}
+                    placeholder="Photo de profil"
+                    type="file"
+                  />
+                  <Form.Label className="visually-hidden">Ajoutez votre photo</Form.Label>
+                </Form.Group>
+              </Row>
               {/* Email */}
               <Form.Group controlId="email">
                 <Form.Label className="visually-hidden">Email :</Form.Label>
@@ -201,8 +230,23 @@ const SignupForm: FunctionComponent = () => {
                   />
                 </Form.Group>
               </Row>
+              {/* Description */}
+              <Form.Group controlId="description">
+                <Form.Label className="visually-hidden">
+                  Description
+                </Form.Label>
+                <Form.Control
+                  onChange={handleChange}
+                  name="description"
+                  isInvalid={touched.description && !!errors.description}
+                  isValid={touched.description && !errors.description}
+                  className={styles.loginInput}
+                  placeholder="Description"
+                />
+              </Form.Group>
 
               {/* Validation */}
+              {/* Move the button outside the form by giving him the form id as an attribute */}
               <Button
                 className={`${
                   isValid && dirty
