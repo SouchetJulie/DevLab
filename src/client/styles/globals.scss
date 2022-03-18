@@ -34,7 +34,7 @@ body,
 
 #__next_page {
   overflow-x: hidden;
-  height: 100vh;
+  min-height: 100vh;
   padding-top: $navbarHeight;
 
   @include media-breakpoint-up(md) {
