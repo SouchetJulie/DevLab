@@ -107,7 +107,14 @@ const SignupForm: FunctionComponent = () => {
       initialValues={initialValues}
       onSubmit={onSubmit}
     >
-      {({ handleSubmit, handleChange, touched, isValid, errors, dirty }) => (
+      {(
+        { handleSubmit,
+          handleChange,
+          touched,
+          isValid,
+          errors,
+          dirty
+        }) => (
         <div className={styles.cardWrapper}>
           <div className={styles.cardContainer}>
             <Link href="/">
